@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'auth_service.dart';
 import 'auth_screen.dart';
 import 'user_service.dart';
+import 'message_board_screen.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -113,7 +114,8 @@ class _ProfileGateState extends State<ProfileGate> {
           );
         }
 
-        return BoardPlaceholder(
+        return MessageBoardScreen(
+          uid: widget.user.uid,
           firstName: record['firstName'] as String,
         );
       },
@@ -214,46 +216,6 @@ class _CompleteProfileScreenState
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class BoardPlaceholder extends StatelessWidget {
-  final String firstName;
-
-  const BoardPlaceholder({
-    super.key,
-    required this.firstName,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Message Board'),
-        backgroundColor: Colors.deepOrange,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Sign Out',
-            onPressed: () => AuthService().signOut(),
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Welcome, $firstName!',
-              style: const TextStyle(fontSize: 26),
-            ),
-            const SizedBox(height: 16),
-            const Text('Your message board will appear here.'),
-          ],
         ),
       ),
     );
