@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'auth_gate.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,16 +110,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           );
         }
-
-        // Temporary screen until we create AuthGate.
-        return const Scaffold(
-          body: Center(
-            child: Text(
-              'Firebase initialized successfully!',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        );
+        return const AuthGate();
       },
     );
   }
