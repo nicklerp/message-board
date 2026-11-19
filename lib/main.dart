@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'auth_gate.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,14 +46,38 @@ class _SplashScreenState extends State<SplashScreen> {
     _initialization = _initializeFirebase();
   }
 
-  Future<void> _initializeFirebase() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+  
+Future<void> _initializeFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  const useEmulators = bool.fromEnvironment(
+    'USE_FIREBASE_EMULATORS',
+    defaultValue: false,
+  );
+
+  if (useEmulators) {
+    const host = '10.0.2.2';
+
+    await FirebaseAuth.instance.useAuthEmulator(
+      host,
+      9099,
     );
 
-    // Keep the splash visible briefly.
-    await Future.delayed(const Duration(seconds: 1));
+    FirebaseFirestore.instance.useFirestoreEmulator(
+      host,
+      8080,
+    );
+
+    debugPrint('Connected to Firebase Emulators');
+  } else {
+    debugPrint('Connected to production Firebase');
   }
+
+  await Future.delayed(const Duration(seconds: 1));
+}
+
 
   @override
   Widget build(BuildContext context) {
